@@ -1,1 +1,1 @@
-Here is a group assignment for the Develop User Experience course at SCU, containing Assessment2&3 for this unit
+It works for individuals before the fourth week and for groups after the fourth week, so it is Gong Zhanbo's personal repository at present
