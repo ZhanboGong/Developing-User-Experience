@@ -2,12 +2,17 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class CarController : MonoBehaviour
 {
     private float horizontalInput, verticalInput;
     private float currentSteerAngle, currentbreakForce;
     private bool isBreaking;
+    // WorkShop
+    private int count;
+    public TextMeshProUGUI countText;
+    public AudioSource clickAudio;
 
     // Settings
     [SerializeField] private float motorForce, breakForce, maxSteerAngle;
@@ -78,5 +83,29 @@ public class CarController : MonoBehaviour
         wheelCollider.GetWorldPose(out pos, out rot);
         wheelTransform.rotation = rot;
         wheelTransform.position = pos;
+    }
+
+    //Workshop
+    public void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.CompareTag("pickup"))
+        {
+            other.gameObject.SetActive(false);
+            count = count + 1;
+            SetCountText();
+            clickAudio.Play();
+        }
+        else if (other.gameObject.CompareTag("pickup2"))
+        {
+            other.gameObject.SetActive(false);
+            count = count + 2;
+            SetCountText();
+            clickAudio.Play();
+        }
+    }
+
+    public void SetCountText()
+    {
+        countText.text = "Score: " + count.ToString();
     }
 }
