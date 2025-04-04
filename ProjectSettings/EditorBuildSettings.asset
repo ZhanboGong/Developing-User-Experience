@@ -14,4 +14,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Group Menu.unity
     guid: ba0d7a098c0f76a41853889b517f5309
+  - enabled: 1
+    path: Assets/ZhanboGong/Asset/Scene/ZhanboGong's Scene.unity
+    guid: 06662b7b5fc3e5f41ad2bb38eb96ace0
   m_configObjects: {}

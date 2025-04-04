@@ -13,6 +13,7 @@ public class CarController : MonoBehaviour
     private int count;
     public TextMeshProUGUI countText;
     public AudioSource clickAudio;
+    public GameObject popup;
 
     // Settings
     [SerializeField] private float motorForce, breakForce, maxSteerAngle;
@@ -102,10 +103,23 @@ public class CarController : MonoBehaviour
             SetCountText();
             clickAudio.Play();
         }
+        else if(other.gameObject.CompareTag("trophy"))
+        {
+            other.gameObject.SetActive(false);
+            SettlementPagePopsUp();
+        }
     }
 
     public void SetCountText()
     {
         countText.text = "Score: " + count.ToString();
+    }
+
+    public void SettlementPagePopsUp()
+    {
+        if (popup != null)
+        {
+            popup.SetActive(true);
+        }
     }
 }
