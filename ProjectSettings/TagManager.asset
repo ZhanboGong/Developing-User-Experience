@@ -8,6 +8,7 @@ TagManager:
   - trophy
   - pickup2
   - pickup3
+  - barrier
   layers:
   - Default
   - TransparentFX

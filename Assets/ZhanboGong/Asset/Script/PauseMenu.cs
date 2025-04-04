@@ -10,6 +10,7 @@ public class PauseMenu : MonoBehaviour
     public Button PauseButton;
     public GameObject PauseButtonObject;
     public Button ResumeButton;
+    public AudioSource PauseAudio;
 
 
     void Start()
@@ -48,6 +49,7 @@ public class PauseMenu : MonoBehaviour
         PausePanel.SetActive(true);
         Time.timeScale = 0f;
         GameIsPaused = true;
+        PauseAudio.Play();
     }
 
     public void LoadMenu()

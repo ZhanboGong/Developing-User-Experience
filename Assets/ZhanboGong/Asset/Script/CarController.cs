@@ -14,11 +14,14 @@ public class CarController : MonoBehaviour
     public GameObject countTextObject;
     public TextMeshProUGUI countText;
     public AudioSource clickAudio;
+    //
+    public AudioSource crashAudio;
     public GameObject popup;
     public GameObject PauseButton;
     public TextMeshProUGUI TimeText;
     public GameObject TimeTextObject;
     public GameObject FieldPanel;
+
 
 
     // Settings
@@ -133,6 +136,10 @@ public class CarController : MonoBehaviour
             Time.timeScale = 0f;
             countTextObject.SetActive(false);
             SettlementPagePopsUp();
+        }
+        else if (other.gameObject.CompareTag("barrier"))
+        {
+            crashAudio.Play();
         }
     }
 
