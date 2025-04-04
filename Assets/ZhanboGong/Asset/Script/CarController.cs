@@ -11,10 +11,15 @@ public class CarController : MonoBehaviour
     private bool isBreaking;
     // WorkShop
     private int count;
+    public GameObject countTextObject;
     public TextMeshProUGUI countText;
     public AudioSource clickAudio;
     public GameObject popup;
     public GameObject PauseButton;
+    public TextMeshProUGUI TimeText;
+    public GameObject TimeTextObject;
+    public GameObject FieldPanel;
+
 
     // Settings
     [SerializeField] private float motorForce, breakForce, maxSteerAngle;
@@ -27,12 +32,21 @@ public class CarController : MonoBehaviour
     [SerializeField] private Transform frontLeftWheelTransform, frontRightWheelTransform;
     [SerializeField] private Transform rearLeftWheelTransform, rearRightWheelTransform;
 
+    void Start()
+    {
+        Time.timeScale = 1f;
+    }
     private void FixedUpdate()
     {
         GetInput();
         HandleMotor();
         HandleSteering();
         UpdateWheels();
+        if(TimeText.text == "00:00:00")
+        {
+
+            FieldPagePopsUp();
+        }
     }
 
     private void GetInput()
@@ -106,9 +120,11 @@ public class CarController : MonoBehaviour
         }
         else if(other.gameObject.CompareTag("trophy"))
         {
+            TimeTextObject.SetActive(false);
             PauseButton.SetActive(false);
             other.gameObject.SetActive(false);
             Time.timeScale = 0f;
+            countTextObject.SetActive(false);
             SettlementPagePopsUp();
         }
     }
@@ -125,4 +141,17 @@ public class CarController : MonoBehaviour
             popup.SetActive(true);
         }
     }
+
+    public void FieldPagePopsUp()
+    {
+        if(FieldPanel != null)
+        {
+            TimeTextObject.SetActive(false);
+            PauseButton.SetActive(false);
+            Time.timeScale = 0f;
+            FieldPanel.SetActive(true);
+            countTextObject.SetActive(false);
+        }
+    }
+
 }
