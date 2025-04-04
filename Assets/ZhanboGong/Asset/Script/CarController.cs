@@ -118,6 +118,13 @@ public class CarController : MonoBehaviour
             SetCountText();
             clickAudio.Play();
         }
+        else if (other.gameObject.CompareTag("pickup3"))
+        {
+            other.gameObject.SetActive(false);
+            count = count + 5;
+            SetCountText();
+            clickAudio.Play();
+        }
         else if(other.gameObject.CompareTag("trophy"))
         {
             TimeTextObject.SetActive(false);
@@ -131,7 +138,7 @@ public class CarController : MonoBehaviour
 
     public void SetCountText()
     {
-        countText.text = "Score: " + count.ToString();
+        countText.text = "Score  " + count.ToString();
     }
 
     public void SettlementPagePopsUp()

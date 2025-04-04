@@ -6,6 +6,8 @@ TagManager:
   tags:
   - pickup
   - trophy
+  - pickup2
+  - pickup3
   layers:
   - Default
   - TransparentFX
