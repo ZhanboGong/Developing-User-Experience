@@ -14,6 +14,7 @@ public class CarController : MonoBehaviour
     public TextMeshProUGUI countText;
     public AudioSource clickAudio;
     public GameObject popup;
+    public GameObject PauseButton;
 
     // Settings
     [SerializeField] private float motorForce, breakForce, maxSteerAngle;
@@ -105,7 +106,9 @@ public class CarController : MonoBehaviour
         }
         else if(other.gameObject.CompareTag("trophy"))
         {
+            PauseButton.SetActive(false);
             other.gameObject.SetActive(false);
+            Time.timeScale = 0f;
             SettlementPagePopsUp();
         }
     }
