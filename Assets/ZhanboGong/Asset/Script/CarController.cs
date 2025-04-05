@@ -9,11 +9,15 @@ public class CarController : MonoBehaviour
     private float horizontalInput, verticalInput;
     private float currentSteerAngle, currentbreakForce;
     private bool isBreaking;
+    private bool isBrakeSoundPlaying = false;
     // WorkShop
     private int count;
     public GameObject countTextObject;
     public TextMeshProUGUI countText;
     public AudioSource clickAudio;
+    public AudioSource Score2;
+    public AudioSource Score5;
+    public AudioSource BackgroundMusic;
     //
     public AudioSource crashAudio;
     public GameObject popup;
@@ -21,6 +25,13 @@ public class CarController : MonoBehaviour
     public TextMeshProUGUI TimeText;
     public GameObject TimeTextObject;
     public GameObject FieldPanel;
+    //Car Audio Feedback
+    public AudioSource accelerateAudio;
+    public AudioSource brakeAudio;
+    //
+    public TextMeshProUGUI currentScoreText;
+    public TextMeshProUGUI timeUsedText;
+    float clearTime;
 
 
 
@@ -38,18 +49,27 @@ public class CarController : MonoBehaviour
     void Start()
     {
         Time.timeScale = 1f;
+        //
+        if (accelerateAudio == null)
+            accelerateAudio = gameObject.AddComponent<AudioSource>();
+        if (brakeAudio == null)
+            brakeAudio = gameObject.AddComponent<AudioSource>();
     }
     private void FixedUpdate()
     {
+        clearTime += Time.fixedDeltaTime;
         GetInput();
         HandleMotor();
         HandleSteering();
         UpdateWheels();
+        UpdateAudioStatus();
         if(TimeText.text == "00:00:00")
         {
 
             FieldPagePopsUp();
         }
+        SetScoreText();
+        SetTimeText();
     }
 
     private void GetInput()
@@ -62,6 +82,17 @@ public class CarController : MonoBehaviour
 
         // Breaking Input
         isBreaking = Input.GetKey(KeyCode.Space);
+
+        //
+        if (Input.GetKeyDown(KeyCode.W))
+        {
+            PlayAccelerateSound();
+        }
+
+        if (Input.GetKey(KeyCode.Space))
+        {
+            PlayBrakeSound();
+        }
     }
 
     private void HandleMotor()
@@ -119,14 +150,14 @@ public class CarController : MonoBehaviour
             other.gameObject.SetActive(false);
             count = count + 2;
             SetCountText();
-            clickAudio.Play();
+            Score2.Play();
         }
         else if (other.gameObject.CompareTag("pickup3"))
         {
             other.gameObject.SetActive(false);
             count = count + 5;
             SetCountText();
-            clickAudio.Play();
+            Score5.Play();
         }
         else if(other.gameObject.CompareTag("trophy"))
         {
@@ -135,6 +166,7 @@ public class CarController : MonoBehaviour
             other.gameObject.SetActive(false);
             Time.timeScale = 0f;
             countTextObject.SetActive(false);
+            BackgroundMusic.Stop();
             SettlementPagePopsUp();
         }
         else if (other.gameObject.CompareTag("barrier"))
@@ -146,6 +178,16 @@ public class CarController : MonoBehaviour
     public void SetCountText()
     {
         countText.text = "Score  " + count.ToString();
+    }
+
+    public void SetScoreText()
+    {
+        currentScoreText.text = "Current Score: " + count.ToString();
+    }
+
+    public void SetTimeText()
+    {
+        timeUsedText.text = "Time Used: " + TimeSpan.FromSeconds(value:clearTime).ToString(format: @"mm\:ss\:ff");
     }
 
     public void SettlementPagePopsUp()
@@ -165,6 +207,31 @@ public class CarController : MonoBehaviour
             Time.timeScale = 0f;
             FieldPanel.SetActive(true);
             countTextObject.SetActive(false);
+        }
+    }
+
+    private void PlayAccelerateSound()
+    {
+        if (accelerateAudio != null)
+        {
+            accelerateAudio.Play();
+        }
+    }
+
+    private void PlayBrakeSound()
+    {
+        if (brakeAudio != null && !isBrakeSoundPlaying)
+        {
+            isBrakeSoundPlaying = true;
+            brakeAudio.Play();
+        }
+    }
+
+    private void UpdateAudioStatus()
+    {
+        if (isBrakeSoundPlaying && !brakeAudio.isPlaying)
+        {
+            isBrakeSoundPlaying = false;
         }
     }
 
