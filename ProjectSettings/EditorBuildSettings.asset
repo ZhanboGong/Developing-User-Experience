@@ -17,4 +17,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/ZhanboGong/Asset/Scene/ZhanboGong's Scene.unity
     guid: 06662b7b5fc3e5f41ad2bb38eb96ace0
+  - enabled: 1
+    path: Assets/ZhanboGong/Asset/Scene/Selection.unity
+    guid: e1970a1b6fc43ac4ba4daca9efbb8caf
   m_configObjects: {}
