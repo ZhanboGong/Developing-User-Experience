@@ -45,5 +45,6 @@ public class CarController : MonoBehaviour
         {
             rb.velocity = rb.velocity.normalized * maxSpeed;
         }
+
     }
 }
