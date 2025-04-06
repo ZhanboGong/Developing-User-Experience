@@ -32,6 +32,9 @@ public class CarController : MonoBehaviour
     public TextMeshProUGUI currentScoreText;
     public TextMeshProUGUI timeUsedText;
     float clearTime;
+    //
+    public AudioSource WinAudio;
+    public AudioSource LoseAudio;
 
 
 
@@ -70,6 +73,7 @@ public class CarController : MonoBehaviour
         }
         SetScoreText();
         SetTimeText();
+        
     }
 
     private void GetInput()
@@ -168,6 +172,7 @@ public class CarController : MonoBehaviour
             countTextObject.SetActive(false);
             BackgroundMusic.Stop();
             SettlementPagePopsUp();
+            WinAudio.Play();
         }
         else if (other.gameObject.CompareTag("barrier"))
         {
@@ -207,6 +212,8 @@ public class CarController : MonoBehaviour
             Time.timeScale = 0f;
             FieldPanel.SetActive(true);
             countTextObject.SetActive(false);
+            BackgroundMusic.Stop();
+            LoseAudio.Play();
         }
     }
 
