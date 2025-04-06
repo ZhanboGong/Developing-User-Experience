@@ -675,7 +675,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 43405159}
   m_LocalRotation: {x: 0.15471293, y: -0, z: -0, w: 0.9879595}
-  m_LocalPosition: {x: -4.13066, y: 5.5, z: -18.34}
+  m_LocalPosition: {x: -4.13066, y: 3.68, z: -12.68}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -697,6 +697,7 @@ MonoBehaviour:
   carTransform: {fileID: 7868246362440511562}
   followSpeed: 5.96
   lookSpeed: 6.69
+  offset: {x: 0, y: 5, z: -10}
 --- !u!4 &45246708 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 400000, guid: cbc86bb57f673ba45a8426789eb0fac0, type: 3}
