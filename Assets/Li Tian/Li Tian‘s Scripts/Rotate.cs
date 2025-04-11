@@ -15,4 +15,13 @@ public class Rotate : MonoBehaviour
     {
         transform.Rotate(new Vector3(x, y, z) * Time.deltaTime);
     }
+    // 在pickup物体上添加的脚本（如PickupItem.cs）
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            Destroy(gameObject);
+            FindObjectOfType<UIManager>().OnPickupCollected();
+        }
+    }
 }
