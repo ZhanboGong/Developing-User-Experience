@@ -4,12 +4,20 @@ using UnityEngine.UI;
 public class VolumeSliderController : MonoBehaviour
 {
     public Slider volumeSlider;
-    public VolumeController volumeController;
+    private VolumeController volumeController;
 
     void Start()
     {
-        // 设置滑动条的初始值为默认值
-        volumeSlider.value = 0.5f;
+        // 获取 VolumeController 的实例
+        volumeController = FindObjectOfType<VolumeController>();
+        if (volumeController == null)
+        {
+            Debug.LogError("VolumeController not found!");
+            return;
+        }
+
+        // 设置滑动条的初始值为当前音量
+        volumeSlider.value = volumeController.volume;
         volumeSlider.onValueChanged.AddListener(OnVolumeSliderValueChanged);
     }
 

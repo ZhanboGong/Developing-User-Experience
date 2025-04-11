@@ -6,6 +6,8 @@ public class VolumeController : MonoBehaviour
 
     void Start()
     {
+        // 确保对象在场景切换时不会被销毁
+        DontDestroyOnLoad(gameObject);
         // 不再加载保存的音量设置，直接使用默认值
         UpdateVolume();
     }
@@ -14,10 +16,5 @@ public class VolumeController : MonoBehaviour
     {
         // 设置全局音量
         AudioListener.volume = volume;
-    }
-
-    public void SaveVolumeSetting()
-    {
-        // 不再保存音量设置
     }
 }

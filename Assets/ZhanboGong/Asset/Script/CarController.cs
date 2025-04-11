@@ -11,6 +11,7 @@ public class CarController : MonoBehaviour
     private bool isBreaking;
     private bool isBrakeSoundPlaying = false;
     // WorkShop
+    
     private int count;
     public GameObject countTextObject;
     public TextMeshProUGUI countText;
@@ -32,9 +33,12 @@ public class CarController : MonoBehaviour
     public TextMeshProUGUI currentScoreText;
     public TextMeshProUGUI timeUsedText;
     float clearTime;
-    //
+    // Win and Lose settlement
     public AudioSource WinAudio;
     public AudioSource LoseAudio;
+    public TextMeshProUGUI WinScoreText;
+    public TextMeshProUGUI WinTimeText;
+    public TextMeshProUGUI LoseScoreText;
 
 
 
@@ -73,7 +77,7 @@ public class CarController : MonoBehaviour
         }
         SetScoreText();
         SetTimeText();
-        
+        SetWinLosePage();
     }
 
     private void GetInput()
@@ -188,6 +192,12 @@ public class CarController : MonoBehaviour
     public void SetScoreText()
     {
         currentScoreText.text = "Current Score: " + count.ToString();
+    }
+
+    public void SetWinLosePage()
+    {
+        WinScoreText.text = LoseScoreText.text = "Total Points: " + count.ToString() + "/36";
+        WinTimeText.text = "Time Used: " + TimeSpan.FromSeconds(value: clearTime).ToString(format: @"mm\:ss\:ff");
     }
 
     public void SetTimeText()
