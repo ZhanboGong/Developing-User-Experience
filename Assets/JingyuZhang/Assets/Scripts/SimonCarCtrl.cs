@@ -56,13 +56,17 @@ public class SimonCarCtrl : MonoBehaviour
 
     public void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("pickup"))
+        if (other.CompareTag("pickup+1"))
         {
             CollectItem(other, 1);
         }
-        else if (other.CompareTag("pickup2"))
+        else if (other.CompareTag("pickup+2"))
         {
             CollectItem(other, 2);
+        }
+        else if (other.CompareTag("pickup-1"))
+        {
+            CollectItem(other, -1);
         }
     }
 
