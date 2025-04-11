@@ -12,6 +12,7 @@ public class UIManager : MonoBehaviour
     public TMP_Text timerText;
     public TMP_Text pickupCountText;
     public GameObject winPanel;
+    public TMP_Text scoreText; // 新增：用于显示得分的Text组件
 
     private int currentPickups = 0;
     private bool isTimeOut = false;
@@ -20,6 +21,12 @@ public class UIManager : MonoBehaviour
     void Start()
     {
         UpdatePickupUI();
+
+        // 初始时隐藏winPanel
+        if (winPanel != null)
+        {
+            winPanel.SetActive(false);
+        }
     }
 
     void Update()
@@ -75,7 +82,16 @@ public class UIManager : MonoBehaviour
 
     private void ShowWinPanel()
     {
-        winPanel.SetActive(true);
+        if (winPanel != null)
+        {
+            winPanel.SetActive(true);
+
+            // 更新得分显示
+            if (scoreText != null)
+            {
+                scoreText.text = $"Your Score: {currentPickups}";
+            }
+        }
         canClick = true;
     }
 
