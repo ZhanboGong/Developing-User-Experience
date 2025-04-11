@@ -1,41 +1,79 @@
 using UnityEngine;
 using TMPro;
+using UnityEngine.UI;
 using System.Collections;
 
 public class CountdownTimer : MonoBehaviour
 {
-    [Header("倒计时设置")]
-    [SerializeField] private TextMeshProUGUI timerText; // 显示倒计时的UI文本
-    [SerializeField] private float totalTime = 60f;     // 总倒计时时间(秒)
-    [SerializeField] private TextMeshProUGUI gameOverText; // 新增：游戏结束文本
+    // 公开访问的静态实例
+    public static CountdownTimer Instance { get; private set; }
     
-    private float currentTime;                          // 当前剩余时间
-    private Coroutine timerCoroutine;                  // 计时器协程引用
+    [Header("倒计时设置")]
+    [SerializeField] private TextMeshProUGUI timerText;
+    [SerializeField] private float totalTime = 60f;
+    
+    [Header("游戏结束界面")]
+    [SerializeField] private GameObject gameOverPanel;
+    [SerializeField] private TextMeshProUGUI gameOverTitle;
+    [SerializeField] private TextMeshProUGUI encouragementText;
+    [SerializeField] private Button restartButton;
+    
+    [Header("需要隐藏的UI元素")]
+    [SerializeField] private GameObject scoreText;
+    [SerializeField] private GameObject timeText;
+    
+    [Header("鼓励性文案")]
+    [SerializeField] private string[] encouragementMessages = {
+       "Keep up the good work, next time will be better!" ,
+        "I almost succeeded. Let's try again!" ,
+        "Every attempt is progress!" ,
+        "Don't give up, keep challenging!"
+    };
+    
+    private float currentTime;
+    private Coroutine timerCoroutine;
+    private bool gameWon = false;
 
-    void Start()
+    private void Awake()
     {
-        // 初始化时重置计时器
-        ResetTimer();
-        
-        // 确保游戏结束文本初始时不可见
-        if (gameOverText != null)
+        // 单例模式初始化
+        if (Instance == null)
         {
-            gameOverText.gameObject.SetActive(false);
+            Instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
         }
     }
 
-    /// <summary>
-    /// 开始倒计时
-    /// </summary>
-    public void StartTimer()
+    void Start()
     {
-        // 隐藏游戏结束文本（如果可见）
-        if (gameOverText != null)
+        ResetTimer();
+        
+        if (gameOverPanel != null)
         {
-            gameOverText.gameObject.SetActive(false);
+            gameOverPanel.SetActive(false);
         }
         
-        // 如果已经有计时器在运行，先停止
+        if (restartButton != null)
+        {
+            restartButton.onClick.AddListener(RestartGame);
+        }
+    }
+
+    public void StartTimer()
+    {
+        gameWon = false;
+        
+        if (gameOverPanel != null)
+        {
+            gameOverPanel.SetActive(false);
+        }
+        
+        if (scoreText != null) scoreText.SetActive(true);
+        if (timeText != null) timeText.SetActive(true);
+        
         if (timerCoroutine != null)
         {
             StopCoroutine(timerCoroutine);
@@ -44,9 +82,6 @@ public class CountdownTimer : MonoBehaviour
         timerCoroutine = StartCoroutine(RunTimer());
     }
 
-    /// <summary>
-    /// 停止倒计时
-    /// </summary>
     public void StopTimer()
     {
         if (timerCoroutine != null)
@@ -56,74 +91,87 @@ public class CountdownTimer : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// 重置倒计时
-    /// </summary>
     public void ResetTimer()
     {
         currentTime = totalTime;
         UpdateTimerDisplay();
     }
 
-    /// <summary>
-    /// 倒计时协程
-    /// </summary>
     private IEnumerator RunTimer()
     {
-        while (currentTime > 0)
+        while (currentTime > 0 && !gameWon)
         {
             yield return new WaitForSeconds(1f);
             currentTime--;
             UpdateTimerDisplay();
         }
         
-        // 倒计时结束
-        OnTimerEnd();
+        // 只有游戏未胜利时才显示游戏结束
+        if (!gameWon)
+        {
+            OnTimerEnd();
+        }
     }
 
-    /// <summary>
-    /// 更新倒计时显示
-    /// </summary>
     private void UpdateTimerDisplay()
     {
         if (timerText != null)
         {
-            // 格式化为 00:00 的分钟:秒格式
             int minutes = Mathf.FloorToInt(currentTime / 60f);
             int seconds = Mathf.FloorToInt(currentTime % 60f);
             timerText.text = string.Format("{0:00}:{1:00}", minutes, seconds);
         }
     }
 
-    /// <summary>
-    /// 倒计时结束时的处理
-    /// </summary>
     private void OnTimerEnd()
     {
         Debug.Log("倒计时结束");
         
-        // 显示游戏结束文本
-        if (gameOverText != null)
-        {
-            gameOverText.text = "GAME OVER";
-            gameOverText.gameObject.SetActive(true);
-        }
+        if (scoreText != null) scoreText.SetActive(false);
+        if (timeText != null) timeText.SetActive(false);
         
-        // 这里可以添加其他游戏结束逻辑
-        // 例如：停止玩家控制、显示重新开始按钮等
+        if (gameOverPanel != null)
+        {
+            gameOverPanel.SetActive(true);
+            
+            if (encouragementMessages.Length > 0 && encouragementText != null)
+            {
+                int randomIndex = Random.Range(0, encouragementMessages.Length);
+                encouragementText.text = encouragementMessages[randomIndex];
+            }
+        }
     }
 
     /// <summary>
-    /// 获取当前剩余时间(秒)
+    /// 当游戏胜利时调用
     /// </summary>
+    public void OnGameWon()
+    {
+        gameWon = true;
+        StopTimer();
+        
+        // 隐藏时间和分数显示
+        if (scoreText != null) scoreText.SetActive(false);
+        if (timeText != null) timeText.SetActive(false);
+    }
+
+    private void RestartGame()
+    {
+        ResetTimer();
+        StartTimer();
+        
+        // 重置分数
+        if (ScoreManager.Instance != null)
+        {
+            ScoreManager.Instance.ResetScore();
+        }
+    }
+
     public float GetCurrentTime()
     {
         return currentTime;
     }
 
-    /// <summary>
-    /// 检查倒计时是否结束
-    /// </summary>
     public bool IsTimeUp()
     {
         return currentTime <= 0f;

@@ -1,5 +1,6 @@
 using UnityEngine;
 using TMPro;
+using UnityEngine.UI;
 
 public class ScoreManager : MonoBehaviour
 {
@@ -8,13 +9,15 @@ public class ScoreManager : MonoBehaviour
     
     [Header("UI显示")]
     [SerializeField] private TextMeshProUGUI scoreText;
-    [SerializeField] private TextMeshProUGUI winText; // 新增：胜利文本
+    [SerializeField] private GameObject winPanel; // 改为胜利面板
     
-    // 游戏设置
+    [Header("胜利设置")]
     [SerializeField] private int winScore = 10; // 胜利所需分数
+    [SerializeField] private Button winRestartButton; // 胜利面板的重置按钮
     
     // 当前分数
     private int currentScore = 0;
+    private bool hasWon = false;
 
     private void Awake()
     {
@@ -32,11 +35,18 @@ public class ScoreManager : MonoBehaviour
 
     private void InitializeUI()
     {
-        // 初始化时隐藏胜利文本
-        if (winText != null)
+        // 初始化时隐藏胜利面板
+        if (winPanel != null)
         {
-            winText.gameObject.SetActive(false);
+            winPanel.SetActive(false);
         }
+        
+        // 设置胜利面板的重置按钮
+        if (winRestartButton != null)
+        {
+            winRestartButton.onClick.AddListener(ResetGame);
+        }
+        
         UpdateScoreDisplay();
     }
 
@@ -45,13 +55,15 @@ public class ScoreManager : MonoBehaviour
     /// </summary>
     public void AddPoints(int points)
     {
+        if (hasWon) return; // 如果已经赢了，不再增加分数
+        
         currentScore += points;
         UpdateScoreDisplay();
         
         // 检查是否获胜
         if (currentScore >= winScore)
         {
-            ShowWinMessage();
+            WinGame();
         }
     }
 
@@ -69,12 +81,13 @@ public class ScoreManager : MonoBehaviour
     public void ResetScore()
     {
         currentScore = 0;
+        hasWon = false;
         UpdateScoreDisplay();
         
-        // 重置时隐藏胜利文本
-        if (winText != null)
+        // 重置时隐藏胜利面板
+        if (winPanel != null)
         {
-            winText.gameObject.SetActive(false);
+            winPanel.SetActive(false);
         }
     }
 
@@ -90,16 +103,37 @@ public class ScoreManager : MonoBehaviour
     }
 
     /// <summary>
-    /// 显示胜利信息
+    /// 游戏胜利逻辑
     /// </summary>
-    private void ShowWinMessage()
+    private void WinGame()
     {
-        if (winText != null)
+        hasWon = true;
+        
+        if (winPanel != null)
         {
-            winText.text = "YOU WIN!";
-            winText.gameObject.SetActive(true);
-            
+            winPanel.SetActive(true);
             // 可以在这里添加胜利音效或其他效果
+        }
+        
+        // 通知倒计时系统游戏已胜利
+        if (CountdownTimer.Instance != null)
+        {
+            CountdownTimer.Instance.OnGameWon();
+        }
+    }
+
+    /// <summary>
+    /// 重置游戏
+    /// </summary>
+    private void ResetGame()
+    {
+        ResetScore();
+        
+        // 通知倒计时系统重新开始
+        if (CountdownTimer.Instance != null)
+        {
+            CountdownTimer.Instance.ResetTimer();
+            CountdownTimer.Instance.StartTimer();
         }
     }
 
@@ -108,6 +142,6 @@ public class ScoreManager : MonoBehaviour
     /// </summary>
     public bool HasWon()
     {
-        return currentScore >= winScore;
+        return hasWon;
     }
 }
