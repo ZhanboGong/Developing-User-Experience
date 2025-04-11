@@ -10,16 +10,17 @@ public class SimonCarCtrl : MonoBehaviour
     private float moveX;
     private float moveY;
     private float moveSpeed = 15f;
-    private float turnSpeed = 50f; // 转向速度
+    private float turnSpeed = 1f;
 
     private int count;
     public TextMeshProUGUI countText;
-
     public AudioSource clickAudio;
 
     void Start()
     {
         rb = GetComponent<Rigidbody>();
+        rb.useGravity = true;
+        rb.mass = 1f;
         count = 0;
         SetCountText();
     }
@@ -33,36 +34,44 @@ public class SimonCarCtrl : MonoBehaviour
 
     public void FixedUpdate()
     {
-        // 根据水平输入（moveX）调整车辆的旋转
-        if (moveX != 0)
+        float turnDirection = moveX * Mathf.Sign(moveY);
+        rb.angularVelocity = Vector3.up * turnDirection * turnSpeed;
+
+        float forceMultiplier = 1f;
+        Vector3 desiredForce = transform.forward * moveY * moveSpeed * forceMultiplier;
+        rb.AddForce(desiredForce, ForceMode.Force);
+
+        float maxSpeed = 18f;
+        if (rb.velocity.magnitude > maxSpeed)
         {
-            transform.Rotate(Vector3.up, moveX * turnSpeed * Time.fixedDeltaTime);
+            rb.velocity = rb.velocity.normalized * maxSpeed;
         }
 
-        // 如果还有垂直输入（moveY），则根据输入向前或向后移动
-        if (moveY != 0)
+        if (Mathf.Abs(transform.eulerAngles.x) > 0.1f || 
+            Mathf.Abs(transform.eulerAngles.z) > 0.1f)
         {
-            Vector3 forwardMovement = transform.forward * moveY * moveSpeed * Time.fixedDeltaTime;
-            rb.MovePosition(transform.position + forwardMovement);
+            transform.eulerAngles = new Vector3(0f, transform.eulerAngles.y, 0f);
         }
     }
 
     public void OnTriggerEnter(Collider other)
     {
-        if(other.gameObject.CompareTag("pickup"))
+        if (other.CompareTag("pickup"))
         {
-            other.gameObject.SetActive(false);
-            count += 1;
-            SetCountText();
-            clickAudio.Play();
+            CollectItem(other, 1);
         }
-        else if(other.gameObject.CompareTag("pickup2"))
+        else if (other.CompareTag("pickup2"))
         {
-            other.gameObject.SetActive(false);
-            count += 2;
-            SetCountText();
-            clickAudio.Play();
+            CollectItem(other, 2);
         }
+    }
+
+    private void CollectItem(Collider item, int points)
+    {
+        item.gameObject.SetActive(false);
+        count += points;
+        SetCountText();
+        clickAudio.Play();
     }
 
     public void SetCountText()
