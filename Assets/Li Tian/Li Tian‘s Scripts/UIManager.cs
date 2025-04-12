@@ -12,11 +12,16 @@ public class UIManager : MonoBehaviour
     public TMP_Text timerText;
     public TMP_Text pickupCountText;
     public GameObject winPanel;
-    public TMP_Text scoreText; // 新增：用于显示得分的Text组件
+    public TMP_Text scoreText;
+
+    [Header("Audio Settings")]  // 新增音频设置区域
+    public AudioClip victorySound;  // 胜利音效
+    public AudioSource audioSource;  // 音频源组件
 
     private int currentPickups = 0;
     private bool isTimeOut = false;
     private bool canClick = false;
+    private bool hasPlayedVictorySound = false;  // 防止重复播放
 
     void Start()
     {
@@ -26,6 +31,12 @@ public class UIManager : MonoBehaviour
         if (winPanel != null)
         {
             winPanel.SetActive(false);
+        }
+
+        // 确保有AudioSource组件
+        if (audioSource == null)
+        {
+            audioSource = gameObject.AddComponent<AudioSource>();
         }
     }
 
@@ -90,6 +101,13 @@ public class UIManager : MonoBehaviour
             if (scoreText != null)
             {
                 scoreText.text = $"Your Score: {currentPickups}";
+            }
+
+            // 播放胜利音效（仅播放一次）
+            if (!hasPlayedVictorySound && victorySound != null && audioSource != null)
+            {
+                audioSource.PlayOneShot(victorySound);
+                hasPlayedVictorySound = true;
             }
         }
         canClick = true;

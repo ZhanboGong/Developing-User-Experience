@@ -34,7 +34,7 @@ public class CarSoundController : MonoBehaviour
     void Update()
     {
         // 检测玩家输入
-        if (Input.GetKey(KeyCode.W))
+        if (Input.GetKeyDown(KeyCode.W))
         {
             // 按下 W 键时播放加速音效
             PlayAccelerate();
