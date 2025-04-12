@@ -14,7 +14,8 @@ public class SimonCarCtrl : MonoBehaviour
 
     private int count;
     public TextMeshProUGUI countText;
-    public AudioSource clickAudio;
+    public AudioSource PickupAudio;
+    public AudioSource BoomAudio;
 
     void Start()
     {
@@ -75,7 +76,15 @@ public class SimonCarCtrl : MonoBehaviour
         item.gameObject.SetActive(false);
         count += points;
         SetCountText();
-        clickAudio.Play();
+
+        if (item.CompareTag("pickup+1") || item.CompareTag("pickup+2"))
+        {
+            PickupAudio.Play();
+        }
+        else if (item.CompareTag("pickup-1"))
+        {
+            BoomAudio.Play();
+        }
     }
 
     public void SetCountText()
