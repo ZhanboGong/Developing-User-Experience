@@ -66,7 +66,7 @@ public class SimonCarCtrl : MonoBehaviour
         }
         else if (other.CompareTag("pickup-1"))
         {
-            CollectItem(other, -1);
+            CollectItem(other, -5);
         }
     }
 
