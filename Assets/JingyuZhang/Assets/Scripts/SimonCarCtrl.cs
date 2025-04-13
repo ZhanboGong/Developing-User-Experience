@@ -17,6 +17,10 @@ public class SimonCarCtrl : MonoBehaviour
     public AudioSource PickupAudio;
     public AudioSource BoomAudio;
 
+    // 新增部分
+    public GameObject successPanel;
+    private CountdownTimer timer;
+
     void Start()
     {
         rb = GetComponent<Rigidbody>();
@@ -24,6 +28,9 @@ public class SimonCarCtrl : MonoBehaviour
         rb.mass = 1f;
         count = 0;
         SetCountText();
+
+        // 获取倒计时脚本
+        timer = FindObjectOfType<CountdownTimer>();
     }
 
     public void OnMove(InputValue moveValue)
@@ -48,7 +55,7 @@ public class SimonCarCtrl : MonoBehaviour
             rb.velocity = rb.velocity.normalized * maxSpeed;
         }
 
-        if (Mathf.Abs(transform.eulerAngles.x) > 0.1f || 
+        if (Mathf.Abs(transform.eulerAngles.x) > 0.1f ||
             Mathf.Abs(transform.eulerAngles.z) > 0.1f)
         {
             transform.eulerAngles = new Vector3(0f, transform.eulerAngles.y, 0f);
@@ -57,7 +64,14 @@ public class SimonCarCtrl : MonoBehaviour
 
     public void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("pickup+1"))
+        // 新增 Helipad 触发逻辑
+        if (other.CompareTag("Helipad"))
+        {
+            successPanel.SetActive(true);
+            timer.StopCountdown();
+            Time.timeScale = 0f;
+        }
+        else if (other.CompareTag("pickup+1"))
         {
             CollectItem(other, 1);
         }

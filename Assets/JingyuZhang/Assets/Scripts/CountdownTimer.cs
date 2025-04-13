@@ -5,8 +5,9 @@ using System.Collections;
 public class CountdownTimer : MonoBehaviour
 {
     public float totalSeconds = 60f;
-    public Color defaultColor = Color.white; 
-    public Color warningColor = Color.red; 
+    public Color defaultColor = Color.white;
+    public Color warningColor = Color.red;
+    public GameObject failPanel; // 新增 FailPanel 引用
 
     private Text displayText;
     private bool isCountingDown = true;
@@ -49,6 +50,13 @@ public class CountdownTimer : MonoBehaviour
             yield return null;
         }
 
+        // 倒计时结束逻辑
+        if (failPanel != null)
+        {
+            failPanel.SetActive(true);
+            Time.timeScale = 0f;
+        }
+
         if (OnTimerFinished != null)
             OnTimerFinished();
 
@@ -56,13 +64,23 @@ public class CountdownTimer : MonoBehaviour
         displayText.color = warningColor;
     }
 
-
     private string FormatTime(float time)
     {
         time = Mathf.Max(time, 0f);
         int seconds = (int)(time % 60f);
         int milliseconds = (int)((time * 1000f) % 1000f);
         return string.Format("{0:D2}:{1:D3}", seconds, milliseconds);
+    }
+
+    // 新增 StopCountdown 方法
+    public void StopCountdown()
+    {
+        if (countdownCoroutine != null)
+        {
+            StopCoroutine(countdownCoroutine);
+            countdownCoroutine = null;
+        }
+        isCountingDown = false;
     }
 
     public void Pause()
