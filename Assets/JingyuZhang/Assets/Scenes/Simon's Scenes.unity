@@ -4919,7 +4919,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 471492299}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1224064004}
+        m_TargetAssemblyTypeName: SimonCarCtrl, Assembly-CSharp
+        m_MethodName: RestartGame
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &471492299
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9047,9 +9059,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d8b343a8eafa5aa4aa4c8da3e094a18c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  totalSeconds: 20
+  totalSeconds: 5
   defaultColor: {r: 1, g: 1, b: 1, a: 1}
   warningColor: {r: 1, g: 0, b: 0, a: 1}
+  failPanel: {fileID: 1364844414}
 --- !u!114 &871587029
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13706,6 +13719,8 @@ MonoBehaviour:
   countText: {fileID: 717390309}
   PickupAudio: {fileID: 1198944536}
   BoomAudio: {fileID: 1791244606}
+  successPanel: {fileID: 1033439778}
+  successScoreText: {fileID: 1821990028}
 --- !u!4 &1224064005 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 400008, guid: a7b60e70606f80245b2f8bc7ce2fadb6, type: 3}
@@ -14832,7 +14847,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1364844415
 RectTransform:
   m_ObjectHideFlags: 0
@@ -16019,7 +16034,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 100000, guid: 796948bfa75e5ee4ba5a68eabfa08ec3, type: 3}
       propertyPath: m_TagString
-      value: Untagged
+      value: Helipad
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 796948bfa75e5ee4ba5a68eabfa08ec3, type: 3}
       propertyPath: m_RootOrder
@@ -16027,15 +16042,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 796948bfa75e5ee4ba5a68eabfa08ec3, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 140.04
+      value: -1.2
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 796948bfa75e5ee4ba5a68eabfa08ec3, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 796948bfa75e5ee4ba5a68eabfa08ec3, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 165.33
+      value: 31.9
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 796948bfa75e5ee4ba5a68eabfa08ec3, type: 3}
       propertyPath: m_LocalRotation.w
@@ -16080,7 +16095,7 @@ BoxCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 600794896}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 7.657976, y: 0.6761554, z: 7.7761126}
@@ -20026,7 +20041,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: You got /15 socres
+  m_text: You got 0/15 scores.
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: f260760188fbdbd48adcb64cadc2ad0a, type: 2}
   m_sharedMaterial: {fileID: 8143183458145378645, guid: f260760188fbdbd48adcb64cadc2ad0a, type: 2}
@@ -23682,7 +23697,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 2109739367}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1224064004}
+        m_TargetAssemblyTypeName: SimonCarCtrl, Assembly-CSharp
+        m_MethodName: RestartGame
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &2109739367
 MonoBehaviour:
   m_ObjectHideFlags: 0

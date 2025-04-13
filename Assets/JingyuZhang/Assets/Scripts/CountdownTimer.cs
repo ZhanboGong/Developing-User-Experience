@@ -1,13 +1,15 @@
 using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
+using UnityEngine.SceneManagement; // 新增场景管理命名空间
+
 
 public class CountdownTimer : MonoBehaviour
 {
     public float totalSeconds = 60f;
     public Color defaultColor = Color.white;
     public Color warningColor = Color.red;
-    public GameObject failPanel; // 新增 FailPanel 引用
+    public GameObject failPanel;
 
     private Text displayText;
     private bool isCountingDown = true;
@@ -16,6 +18,13 @@ public class CountdownTimer : MonoBehaviour
 
     public delegate void TimerFinishedDelegate();
     public event TimerFinishedDelegate OnTimerFinished;
+
+    // 新增重启游戏方法
+    public void RestartGame()
+    {
+        Time.timeScale = 1f;
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    }
 
     void Start()
     {
@@ -46,11 +55,9 @@ public class CountdownTimer : MonoBehaviour
             {
                 displayText.color = defaultColor;
             }
-
             yield return null;
         }
 
-        // 倒计时结束逻辑
         if (failPanel != null)
         {
             failPanel.SetActive(true);
@@ -72,7 +79,6 @@ public class CountdownTimer : MonoBehaviour
         return string.Format("{0:D2}:{1:D3}", seconds, milliseconds);
     }
 
-    // 新增 StopCountdown 方法
     public void StopCountdown()
     {
         if (countdownCoroutine != null)
@@ -83,18 +89,12 @@ public class CountdownTimer : MonoBehaviour
         isCountingDown = false;
     }
 
-    public void Pause()
-    {
-        isCountingDown = false;
-    }
-
+    public void Pause() => isCountingDown = false;
     public void Resume()
     {
         isCountingDown = true;
         if (countdownCoroutine == null)
-        {
             countdownCoroutine = StartCoroutine(CountdownRoutine());
-        }
     }
 
     public void ResetTimer()
