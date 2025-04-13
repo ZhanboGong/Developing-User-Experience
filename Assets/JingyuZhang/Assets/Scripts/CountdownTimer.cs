@@ -1,8 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
-using UnityEngine.SceneManagement; // 新增场景管理命名空间
-
 
 public class CountdownTimer : MonoBehaviour
 {
@@ -18,13 +16,6 @@ public class CountdownTimer : MonoBehaviour
 
     public delegate void TimerFinishedDelegate();
     public event TimerFinishedDelegate OnTimerFinished;
-
-    // 新增重启游戏方法
-    public void RestartGame()
-    {
-        Time.timeScale = 1f;
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-    }
 
     void Start()
     {
@@ -47,14 +38,7 @@ public class CountdownTimer : MonoBehaviour
         {
             remainingTime -= Time.deltaTime;
             displayText.text = FormatTime(remainingTime);
-            if (remainingTime <= 10f)
-            {
-                displayText.color = warningColor;
-            }
-            else
-            {
-                displayText.color = defaultColor;
-            }
+            displayText.color = (remainingTime <= 10f) ? warningColor : defaultColor;
             yield return null;
         }
 
@@ -64,11 +48,15 @@ public class CountdownTimer : MonoBehaviour
             Time.timeScale = 0f;
         }
 
-        if (OnTimerFinished != null)
-            OnTimerFinished();
-
+        OnTimerFinished?.Invoke();
         displayText.text = "Time's Up!";
         displayText.color = warningColor;
+    }
+
+    // 新增方法：供其他脚本获取格式化后的剩余时间
+    public string GetRemainingTimeFormatted()
+    {
+        return FormatTime(remainingTime);
     }
 
     private string FormatTime(float time)

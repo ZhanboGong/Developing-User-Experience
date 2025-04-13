@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 using TMPro;
-using UnityEngine.SceneManagement; // 新增场景管理命名空间
+using UnityEngine.SceneManagement;
 
 public class SimonCarCtrl : MonoBehaviour
 {
@@ -14,17 +14,14 @@ public class SimonCarCtrl : MonoBehaviour
     public TextMeshProUGUI countText;
     public AudioSource PickupAudio, BoomAudio;
     public GameObject successPanel;
-    public TextMeshProUGUI successScoreText; // 新增分数显示文本
+    public TextMeshProUGUI successScoreText;
+
+    [Header("Pause")]
+    public GameObject pausePanel; // 确保在Unity编辑器中绑定此面板
+    public TextMeshProUGUI pauseTimeText;
+    public TextMeshProUGUI pauseScoreText;
+
     private CountdownTimer timer;
-
-    // 新增重启游戏方法
-    public void RestartGame()
-    {
-        Time.timeScale = 1f; // 恢复时间流速
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-    }
-
-
 
     void Start()
     {
@@ -34,6 +31,7 @@ public class SimonCarCtrl : MonoBehaviour
         count = 0;
         SetCountText();
         timer = FindObjectOfType<CountdownTimer>();
+        pausePanel.SetActive(false); // 初始隐藏暂停面板
     }
 
     public void OnMove(InputValue moveValue)
@@ -61,11 +59,26 @@ public class SimonCarCtrl : MonoBehaviour
         }
     }
 
+    // 点击暂停按钮调用此方法
+    public void TogglePause()
+    {
+        bool isPaused = !pausePanel.activeSelf;
+        pausePanel.SetActive(isPaused);
+        Time.timeScale = isPaused ? 0f : 1f;
+
+        if (isPaused)
+        {
+            // 更新暂停界面数据
+            pauseTimeText.text = timer.GetRemainingTimeFormatted();
+            pauseScoreText.text = "Score: " + count.ToString();
+        }
+    }
+
     public void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Helipad"))
         {
-            int displayScore = Mathf.Min(count, 15); // 限制最大显示15分
+            int displayScore = Mathf.Min(count, 15);
             successScoreText.text = $"You got {displayScore}/15 scores";
             successPanel.SetActive(true);
             timer.StopCountdown();
@@ -89,4 +102,10 @@ public class SimonCarCtrl : MonoBehaviour
     }
 
     public void SetCountText() => countText.text = "Score: " + count.ToString();
+
+    public void RestartGame()
+    {
+        Time.timeScale = 1f;
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    }
 }
