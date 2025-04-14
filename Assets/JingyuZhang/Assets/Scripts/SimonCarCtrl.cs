@@ -103,8 +103,8 @@ public class SimonCarCtrl : MonoBehaviour
         if (isPaused)
         {
             // 更新暂停界面数据
-            pauseTimeText.text = "Current Time Remaining:" + timer.GetRemainingTimeFormatted();
-            pauseScoreText.text = "Current Score:" + count.ToString();
+            pauseTimeText.text = "Current Time Remaining:  " + timer.GetRemainingTimeFormatted();
+            pauseScoreText.text = "Current Score:  " + count.ToString();
         }
     }
 
@@ -121,7 +121,7 @@ public class SimonCarCtrl : MonoBehaviour
         }
         else if (other.CompareTag("pickup+1")) CollectItem(other, 1);
         else if (other.CompareTag("pickup+2")) CollectItem(other, 2);
-        else if (other.CompareTag("pickup-1")) CollectItem(other, -5);
+        else if (other.CompareTag("pickup-1")) CollectItem(other, -2);
     }
 
     private void CollectItem(Collider item, int points)
