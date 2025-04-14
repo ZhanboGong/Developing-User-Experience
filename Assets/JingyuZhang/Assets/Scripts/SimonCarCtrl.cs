@@ -23,6 +23,9 @@ public class SimonCarCtrl : MonoBehaviour
 
     private CountdownTimer timer;
 
+    // 添加对粒子系统的引用
+    public ParticleSystem sandDustEffect;
+
     void Start()
     {
         rb = GetComponent<Rigidbody>();
@@ -32,6 +35,12 @@ public class SimonCarCtrl : MonoBehaviour
         SetCountText();
         timer = FindObjectOfType<CountdownTimer>();
         pausePanel.SetActive(false); // 初始隐藏暂停面板
+
+        // 初始化时确保粒子系统处于关闭状态
+        if (sandDustEffect != null)
+        {
+            sandDustEffect.Stop();
+        }
     }
 
     public void OnMove(InputValue moveValue)
@@ -57,8 +66,33 @@ public class SimonCarCtrl : MonoBehaviour
         {
             transform.eulerAngles = new Vector3(0f, transform.eulerAngles.y, 0f);
         }
+
+        // 根据速度控制粒子效果的开关
+        if (rb.velocity.magnitude > 0.1f)
+        {
+            EnableSandDustEffect(true);
+        }
+        else
+        {
+            EnableSandDustEffect(false);
+        }
     }
 
+    private void EnableSandDustEffect(bool enable)
+    {
+        if (sandDustEffect != null)
+        {
+            if (enable && !sandDustEffect.isPlaying)
+            {
+                sandDustEffect.Play();
+            }
+            else if (!enable && sandDustEffect.isPlaying)
+            {
+                sandDustEffect.Stop();
+            }
+        }
+    }
+    
     // 点击暂停按钮调用此方法
     public void TogglePause()
     {
