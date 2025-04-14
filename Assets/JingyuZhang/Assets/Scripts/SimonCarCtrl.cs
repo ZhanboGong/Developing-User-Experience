@@ -69,8 +69,8 @@ public class SimonCarCtrl : MonoBehaviour
         if (isPaused)
         {
             // 更新暂停界面数据
-            pauseTimeText.text = timer.GetRemainingTimeFormatted();
-            pauseScoreText.text = "Score: " + count.ToString();
+            pauseTimeText.text = "Current Time Remaining:" + timer.GetRemainingTimeFormatted();
+            pauseScoreText.text = "Current Score:" + count.ToString();
         }
     }
 
