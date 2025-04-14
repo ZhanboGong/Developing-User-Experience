@@ -22,6 +22,9 @@ public class CountdownTimer : MonoBehaviour
     [SerializeField] private GameObject scoreText;
     [SerializeField] private GameObject timeText;
     
+    [Header("金币设置")]
+    [SerializeField] private string coinTag = "Goldcoins"; // 金币对象的标签
+    
     [Header("鼓励性文案")]
     [SerializeField] private string[] encouragementMessages = {
        "Keep up the good work, next time will be better!" ,
@@ -73,6 +76,9 @@ public class CountdownTimer : MonoBehaviour
         
         if (scoreText != null) scoreText.SetActive(true);
         if (timeText != null) timeText.SetActive(true);
+        
+        // 重新激活所有金币（如果重新开始游戏）
+        ReactivateAllCoins();
         
         if (timerCoroutine != null)
         {
@@ -127,9 +133,14 @@ public class CountdownTimer : MonoBehaviour
     {
         Debug.Log("倒计时结束");
         
+        // 隐藏分数和时间显示
         if (scoreText != null) scoreText.SetActive(false);
         if (timeText != null) timeText.SetActive(false);
         
+        // 禁用所有金币对象
+        DeactivateAllCoins();
+        
+        // 显示游戏结束面板
         if (gameOverPanel != null)
         {
             gameOverPanel.SetActive(true);
@@ -140,6 +151,32 @@ public class CountdownTimer : MonoBehaviour
                 encouragementText.text = encouragementMessages[randomIndex];
             }
         }
+    }
+
+    /// <summary>
+    /// 禁用所有金币对象（使用SetActive(false)）
+    /// </summary>
+    private void DeactivateAllCoins()
+    {
+        GameObject[] coins = GameObject.FindGameObjectsWithTag(coinTag);
+        foreach (GameObject coin in coins)
+        {
+            coin.SetActive(false);
+        }
+        Debug.Log($"已禁用 {coins.Length} 个金币对象");
+    }
+
+    /// <summary>
+    /// 重新激活所有金币对象（用于重新开始游戏）
+    /// </summary>
+    private void ReactivateAllCoins()
+    {
+        GameObject[] coins = GameObject.FindGameObjectsWithTag(coinTag);
+        foreach (GameObject coin in coins)
+        {
+            coin.SetActive(true);
+        }
+        Debug.Log($"已重新激活 {coins.Length} 个金币对象");
     }
 
     /// <summary>

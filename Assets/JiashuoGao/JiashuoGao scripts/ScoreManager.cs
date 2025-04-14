@@ -9,15 +9,19 @@ public class ScoreManager : MonoBehaviour
     
     [Header("UI显示")]
     [SerializeField] private TextMeshProUGUI scoreText;
-    [SerializeField] private GameObject winPanel; // 改为胜利面板
+    [SerializeField] private GameObject winPanel; // 胜利面板
+    [SerializeField] private TextMeshProUGUI finalScoreText; // 胜利面板上的最终得分文本
     
     [Header("胜利设置")]
     [SerializeField] private int winScore = 10; // 胜利所需分数
     [SerializeField] private Button winRestartButton; // 胜利面板的重置按钮
+    [SerializeField] private AudioClip winSound; // 胜利音效
+    [SerializeField] private float winSoundVolume = 1.0f; // 音效音量
     
     // 当前分数
     private int currentScore = 0;
     private bool hasWon = false;
+    private AudioSource audioSource; // 音频源组件
 
     private void Awake()
     {
@@ -26,6 +30,7 @@ public class ScoreManager : MonoBehaviour
         {
             Instance = this;
             InitializeUI();
+            InitializeAudio();
         }
         else
         {
@@ -48,6 +53,14 @@ public class ScoreManager : MonoBehaviour
         }
         
         UpdateScoreDisplay();
+    }
+
+    private void InitializeAudio()
+    {
+        // 添加音频源组件
+        audioSource = gameObject.AddComponent<AudioSource>();
+        audioSource.playOnAwake = false;
+        audioSource.volume = winSoundVolume;
     }
 
     /// <summary>
@@ -109,10 +122,21 @@ public class ScoreManager : MonoBehaviour
     {
         hasWon = true;
         
+        // 播放胜利音效
+        if (winSound != null && audioSource != null)
+        {
+            audioSource.PlayOneShot(winSound);
+        }
+        
         if (winPanel != null)
         {
+            // 显示最终得分
+            if (finalScoreText != null)
+            {
+                finalScoreText.text = "Final Score: " + currentScore.ToString();
+            }
+            
             winPanel.SetActive(true);
-            // 可以在这里添加胜利音效或其他效果
         }
         
         // 通知倒计时系统游戏已胜利
