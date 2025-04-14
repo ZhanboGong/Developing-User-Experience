@@ -1,15 +1,12 @@
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.Audio;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
 
-    public AudioMixer audioMixer;
-    private float savedVolume = 1f;
-
-    void Awake()
+    private void Awake()
     {
         if (Instance == null)
         {
@@ -22,18 +19,19 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void SetVolume(float volume)
+    // 返回主菜单
+    public void ReturnToMenu()
     {
-        savedVolume = volume;
-        audioMixer.SetFloat("MasterVolume", Mathf.Log10(volume) * 20);
+        Time.timeScale = 1f;
+        BGMManager.Instance.StopBGM(); // 停止BGM
+        SceneManager.LoadScene(0);
     }
 
+    // 重新开始游戏
     public void RestartGame()
     {
         Time.timeScale = 1f;
+        BGMManager.Instance.PlayBGM(); // 重新播放BGM
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
-
-    public void ReturnToMenu() => SceneManager.LoadScene(0);
-    public float GetSavedVolume() => savedVolume;
 }

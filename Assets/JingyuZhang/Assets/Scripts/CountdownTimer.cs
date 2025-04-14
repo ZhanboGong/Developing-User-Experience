@@ -21,11 +21,6 @@ public class CountdownTimer : MonoBehaviour
     {
         remainingTime = totalSeconds;
         displayText = GetComponent<Text>();
-        if (displayText == null)
-        {
-            Debug.LogError("未找到 Text 组件！");
-            return;
-        }
 
         displayText.text = FormatTime(remainingTime);
         displayText.color = defaultColor;
@@ -46,6 +41,7 @@ public class CountdownTimer : MonoBehaviour
         {
             failPanel.SetActive(true);
             Time.timeScale = 0f;
+
         }
 
         OnTimerFinished?.Invoke();

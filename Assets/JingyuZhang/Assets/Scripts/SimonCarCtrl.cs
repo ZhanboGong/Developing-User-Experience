@@ -83,6 +83,7 @@ public class SimonCarCtrl : MonoBehaviour
             successPanel.SetActive(true);
             timer.StopCountdown();
             Time.timeScale = 0f;
+
         }
         else if (other.CompareTag("pickup+1")) CollectItem(other, 1);
         else if (other.CompareTag("pickup+2")) CollectItem(other, 2);
