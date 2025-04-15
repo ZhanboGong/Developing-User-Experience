@@ -6,34 +6,32 @@ public class UIManager : MonoBehaviour
 {
     [Header("Game Settings")]
     [SerializeField] private float timer = 60f;
-    [SerializeField] private int targetPickups = 4;
+    [SerializeField] private int targetPickups = 3; // 保留目标数量
 
     [Header("UI References")]
     public TMP_Text timerText;
-    public TMP_Text pickupCountText;
+    public TMP_Text pickupCountText; // 保留并继续更新
     public GameObject winPanel;
     public TMP_Text scoreText;
 
-    [Header("Audio Settings")]  // 新增音频设置区域
-    public AudioClip victorySound;  // 胜利音效
-    public AudioSource audioSource;  // 音频源组件
+    [Header("Audio Settings")]
+    public AudioClip victorySound;
+    public AudioSource audioSource;
 
     private int currentPickups = 0;
     private bool isTimeOut = false;
     private bool canClick = false;
-    private bool hasPlayedVictorySound = false;  // 防止重复播放
+    private bool hasPlayedVictorySound = false;
 
     void Start()
     {
-        UpdatePickupUI();
+        UpdatePickupUI(); // 初始化物品数量显示
 
-        // 初始时隐藏winPanel
         if (winPanel != null)
         {
             winPanel.SetActive(false);
         }
 
-        // 确保有AudioSource组件
         if (audioSource == null)
         {
             audioSource = gameObject.AddComponent<AudioSource>();
@@ -48,6 +46,24 @@ public class UIManager : MonoBehaviour
         }
     }
 
+    // 碰撞奖杯触发
+    void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Trophy"))
+        {
+            TriggerWin();
+        }
+    }
+
+    // 触发器奖杯触发
+    void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Trophy"))
+        {
+            TriggerWin();
+        }
+    }
+
     private void Timer()
     {
         timer -= Time.deltaTime;
@@ -56,37 +72,29 @@ public class UIManager : MonoBehaviour
         if (timer <= 0)
         {
             timer = 0;
-            TimeOut();
+            TriggerWin(); // 时间结束触发
         }
     }
 
+    // 物品收集功能
     public void OnPickupCollected()
     {
-        if (isTimeOut) return;
-
         currentPickups = Mathf.Min(currentPickups + 1, targetPickups);
         UpdatePickupUI();
 
-        if (currentPickups >= targetPickups)
-        {
-            WinGame();
-        }
     }
 
+    // UI 更新方法
     private void UpdatePickupUI()
     {
         pickupCountText.text = $"({currentPickups}/{targetPickups})";
     }
 
-    private void TimeOut()
+    // 合并的胜利触发方法
+    public void TriggerWin() // 修改为 public
     {
-        isTimeOut = true;
-        timerText.text = "00:00";
-        ShowWinPanel();
-    }
+        if (isTimeOut) return;
 
-    private void WinGame()
-    {
         isTimeOut = true;
         ShowWinPanel();
     }
@@ -97,13 +105,11 @@ public class UIManager : MonoBehaviour
         {
             winPanel.SetActive(true);
 
-            // 更新得分显示
             if (scoreText != null)
             {
-                scoreText.text = $"Your Score: {currentPickups}";
+                scoreText.text = $"Final Time: {60 - timer:F1}s\nItems Collected: {currentPickups}/{targetPickups}";
             }
 
-            // 播放胜利音效（仅播放一次）
             if (!hasPlayedVictorySound && victorySound != null && audioSource != null)
             {
                 audioSource.PlayOneShot(victorySound);

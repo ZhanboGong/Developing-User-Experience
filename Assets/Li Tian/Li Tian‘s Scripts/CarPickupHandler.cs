@@ -7,6 +7,9 @@ public class CarPickupHandler : MonoBehaviour
     public AudioSource clickAudio;
     private int count = 0;
 
+    // 引入 UIManager 脚本实例
+    public UIManager uiManager;
+
     void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("pickup"))
@@ -16,12 +19,14 @@ public class CarPickupHandler : MonoBehaviour
             SetCountText();
             clickAudio.Play();
         }
-        else if (other.CompareTag("Sphere"))
+        else if (other.CompareTag("Trophy"))
         {
             Destroy(other.gameObject);
-            count += 2;
-            SetCountText();
-            clickAudio.Play();
+            // 通知 UIManager 触发胜利条件
+            if (uiManager != null)
+            {
+                uiManager.TriggerWin();
+            }
         }
     }
 
