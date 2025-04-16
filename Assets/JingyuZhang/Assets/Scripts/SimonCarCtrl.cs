@@ -21,7 +21,7 @@ public class SimonCarCtrl : MonoBehaviour
     public TextMeshProUGUI pauseTimeText;
     public TextMeshProUGUI pauseScoreText;
 
-    private CountdownTimer timer;
+    private SimonCountdownTimer timer;
 
     // 添加对粒子系统的引用
     public ParticleSystem sandDustEffect;
@@ -33,7 +33,7 @@ public class SimonCarCtrl : MonoBehaviour
         rb.mass = 1f;
         count = 0;
         SetCountText();
-        timer = FindObjectOfType<CountdownTimer>();
+        timer = FindObjectOfType<SimonCountdownTimer>();
         pausePanel.SetActive(false); // 初始隐藏暂停面板
 
         // 初始化时确保粒子系统处于关闭状态

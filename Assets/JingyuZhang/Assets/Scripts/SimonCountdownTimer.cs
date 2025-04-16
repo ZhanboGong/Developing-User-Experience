@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
 
-public class CountdownTimer : MonoBehaviour
+public class SimonCountdownTimer : MonoBehaviour
 {
     public float totalSeconds = 60f;
     public Color defaultColor = Color.white;
