@@ -6,16 +6,19 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/MENU.unity
-    guid: 9fc0d4010bbf28b4594072e72b8655ab
+    path: Assets/JingyuZhang/Assets/Scenes/StartPage.unity
+    guid: 77f41541e8d535f4e92ab8688de39a53
   - enabled: 1
-    path: Assets/Scenes/Caleb's Scene.unity
-    guid: 29c1606a16f981742b7a0c4866b4b295
-  - enabled: 1
-    path: Assets/Scenes/Group Menu.unity
-    guid: ba0d7a098c0f76a41853889b517f5309
+    path: Assets/ZhanboGong/Asset/Scene/Selection.unity
+    guid: e1970a1b6fc43ac4ba4daca9efbb8caf
   - enabled: 1
     path: Assets/ZhanboGong/Asset/Clabe's Scene/ZhanboGong.unity
     guid: adc1f1c1de6105444bf1914e6c90a0c3
+  - enabled: 1
+    path: "Assets/Li Tian/Li Tian\u2018s Scenes/Li Tian's Scene.unity"
+    guid: 494ac372f992b1d4c83a743e2ba7cc0c
+  - enabled: 1
+    path: Assets/JingyuZhang/Assets/Scenes/Simon's Scenes.unity
+    guid: ac32f2af3c7ea2145bd76eb9cae1ca0c
   m_configObjects:
     com.unity.input.settings: {fileID: 11400000, guid: e723cde04195d004daadbe0151056f23, type: 2}
