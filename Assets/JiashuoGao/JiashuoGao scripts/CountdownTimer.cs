@@ -36,6 +36,7 @@ public class CountdownTimer : MonoBehaviour
     private float currentTime;
     private Coroutine timerCoroutine;
     private bool gameWon = false;
+    private bool isPaused = false; // 新增暂停状态
 
     private void Awake()
     {
@@ -68,6 +69,7 @@ public class CountdownTimer : MonoBehaviour
     public void StartTimer()
     {
         gameWon = false;
+        isPaused = false; // 重置暂停状态
         
         if (gameOverPanel != null)
         {
@@ -107,9 +109,16 @@ public class CountdownTimer : MonoBehaviour
     {
         while (currentTime > 0 && !gameWon)
         {
-            yield return new WaitForSeconds(1f);
-            currentTime--;
-            UpdateTimerDisplay();
+            if (!isPaused) // 只有在未暂停时才减少时间
+            {
+                yield return new WaitForSeconds(1f);
+                currentTime--;
+                UpdateTimerDisplay();
+            }
+            else
+            {
+                yield return null; // 暂停时等待一帧
+            }
         }
         
         // 只有游戏未胜利时才显示游戏结束
@@ -117,6 +126,27 @@ public class CountdownTimer : MonoBehaviour
         {
             OnTimerEnd();
         }
+    }
+
+    // 新增暂停计时器方法
+    public void PauseTimer()
+    {
+        isPaused = true;
+        Debug.Log("计时器已暂停");
+    }
+
+    // 新增恢复计时器方法
+    public void ResumeTimer()
+    {
+        isPaused = false;
+        Debug.Log("计时器已恢复");
+    }
+
+    // 新增切换暂停状态方法
+    public void TogglePause()
+    {
+        isPaused = !isPaused;
+        Debug.Log(isPaused ? "计时器已暂停" : "计时器已恢复");
     }
 
     private void UpdateTimerDisplay()
@@ -212,5 +242,11 @@ public class CountdownTimer : MonoBehaviour
     public bool IsTimeUp()
     {
         return currentTime <= 0f;
+    }
+
+    // 新增获取暂停状态方法
+    public bool IsPaused()
+    {
+        return isPaused;
     }
 }

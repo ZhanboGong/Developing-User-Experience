@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class GameManager : MonoBehaviour
+public class GameManager1 : MonoBehaviour
 {
     [SerializeField] private CountdownTimer timer; // 拖拽赋值
     
