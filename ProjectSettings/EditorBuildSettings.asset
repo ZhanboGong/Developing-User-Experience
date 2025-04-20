@@ -20,5 +20,11 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/JingyuZhang/Assets/Scenes/Simon's Scenes.unity
     guid: ac32f2af3c7ea2145bd76eb9cae1ca0c
+  - enabled: 1
+    path: Assets/JiashuoGao/JiashuoGao scenes/JiashuoGao scene2.unity
+    guid: ae1697b97dbf0b14d97644f829539641
+  - enabled: 1
+    path: Assets/JiashuoGao/JiashuoGao scenes/Credits.unity
+    guid: aaa12fc6348d48549b422d9eb49ff9ab
   m_configObjects:
     com.unity.input.settings: {fileID: 11400000, guid: e723cde04195d004daadbe0151056f23, type: 2}
