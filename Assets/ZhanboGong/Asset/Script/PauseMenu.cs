@@ -15,8 +15,6 @@ public class PauseMenu : MonoBehaviour
 
     void Start()
     {
-        PauseButton.onClick.AddListener(Pause);
-        ResumeButton.onClick.AddListener(Resume);
     }
     // Update is called once per frame
     void Update()
