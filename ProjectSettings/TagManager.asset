@@ -4,11 +4,7 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - pickup
-  - trophy
-  - pickup2
-  - pickup3
-  - barrier
+
   layers:
   - Default
   - TransparentFX
