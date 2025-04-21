@@ -9,10 +9,12 @@ public class NaviControl : MonoBehaviour
     public void LoadMyScene(int sceneNumber)
     {
         SceneManager.LoadScene(sceneNumber);
+        Time.timeScale = 1f;
     }
 
     public void LoadMyScene(string sceneName)
     {
         SceneManager.LoadScene(sceneName);
+        Time.timeScale = 1f;
     }
 }
