@@ -22,6 +22,8 @@ public class SimonCarCtrl : MonoBehaviour
     public TextMeshProUGUI pauseScoreText;
 
     private SimonCountdownTimer timer;
+    public AudioSource audioSource; 
+    public AudioClip SimonvictorySound;
 
     // 添加对粒子系统的引用
     public ParticleSystem sandDustEffect;
@@ -115,6 +117,7 @@ public class SimonCarCtrl : MonoBehaviour
             int displayScore = Mathf.Min(count, 15);
             successScoreText.text = $"You got {displayScore}/15 scores";
             successPanel.SetActive(true);
+            audioSource.PlayOneShot(SimonvictorySound, 1.0f); 
             timer.StopCountdown();
             Time.timeScale = 0f;
 

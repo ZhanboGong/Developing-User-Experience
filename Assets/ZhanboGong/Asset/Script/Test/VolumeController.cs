@@ -2,19 +2,19 @@ using UnityEngine;
 
 public class VolumeController : MonoBehaviour
 {
-    public float volume = 0.5f; // Ä¬ÈÏÒôÁ¿Îª50%
+    public float volume = 0.5f; // é»˜è®¤éŸ³é‡ä¸º50%
 
     void Start()
     {
-        // È·±£¶ÔÏóÔÚ³¡¾°ÇĞ»»Ê±²»»á±»Ïú»Ù
+        // ç¡®ä¿å¯¹è±¡åœ¨åœºæ™¯åˆ‡æ¢æ—¶ä¸ä¼šè¢«é”€æ¯
         DontDestroyOnLoad(gameObject);
-        // ²»ÔÙ¼ÓÔØ±£´æµÄÒôÁ¿ÉèÖÃ£¬Ö±½ÓÊ¹ÓÃÄ¬ÈÏÖµ
+        // ä¸å†åŠ è½½ä¿å­˜çš„éŸ³é‡è®¾ç½®ï¼Œç›´æ¥ä½¿ç”¨é»˜è®¤å€¼
         UpdateVolume();
     }
 
     public void UpdateVolume()
     {
-        // ÉèÖÃÈ«¾ÖÒôÁ¿
+        // è®¾ç½®å…¨å±€éŸ³é‡
         AudioListener.volume = volume;
     }
 }

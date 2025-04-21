@@ -8,7 +8,7 @@ public class VolumeSliderController : MonoBehaviour
 
     void Start()
     {
-        // »ñÈ¡ VolumeController µÄÊµÀı
+        // è·å– VolumeController çš„å®ä¾‹
         volumeController = FindObjectOfType<VolumeController>();
         if (volumeController == null)
         {
@@ -16,14 +16,14 @@ public class VolumeSliderController : MonoBehaviour
             return;
         }
 
-        // ÉèÖÃ»¬¶¯ÌõµÄ³õÊ¼ÖµÎªµ±Ç°ÒôÁ¿
+        // è®¾ç½®æ»‘åŠ¨æ¡çš„åˆå§‹å€¼ä¸ºå½“å‰éŸ³é‡
         volumeSlider.value = volumeController.volume;
         volumeSlider.onValueChanged.AddListener(OnVolumeSliderValueChanged);
     }
 
     void OnVolumeSliderValueChanged(float newValue)
     {
-        // ¸üĞÂÒôÁ¿¿ØÖÆÆ÷µÄÒôÁ¿Öµ
+        // æ›´æ–°éŸ³é‡æ§åˆ¶å™¨çš„éŸ³é‡å€¼
         volumeController.volume = newValue;
         volumeController.UpdateVolume();
     }

@@ -11,18 +11,7 @@ public class PauseUIManager : MonoBehaviour
     [Header("音量控制")]
     public Slider volumeSlider;
 
-    private void Start()
-    {
-        // 初始化滑块值为当前BGM音量
-        volumeSlider.value = BGMManager.Instance.audioSource.volume;
-        volumeSlider.onValueChanged.AddListener(SetVolume);
-    }
 
-    // 直接调用BGMManager设置音量
-    private void SetVolume(float value)
-    {
-        BGMManager.Instance.SetVolume(value);
-    }
 
     // 切换页面（例如从暂停页切换到设置页）
     public void SwitchPage(GameObject targetPage)

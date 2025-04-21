@@ -16,6 +16,8 @@ public class SimonCountdownTimer : MonoBehaviour
 
     public delegate void TimerFinishedDelegate();
     public event TimerFinishedDelegate OnTimerFinished;
+    public AudioSource audioSource; 
+    public AudioClip SimonfailureSound;
 
     void Start()
     {
@@ -40,6 +42,7 @@ public class SimonCountdownTimer : MonoBehaviour
         if (failPanel != null)
         {
             failPanel.SetActive(true);
+            audioSource.PlayOneShot(SimonfailureSound, 1.0f);
             Time.timeScale = 0f;
 
         }

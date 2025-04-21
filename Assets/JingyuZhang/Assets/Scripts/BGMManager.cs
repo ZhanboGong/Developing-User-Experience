@@ -3,11 +3,13 @@ using UnityEngine.SceneManagement;
 
 public class BGMManager : MonoBehaviour
 {
-    public static BGMManager Instance;  // 单例
+    public static BGMManager Instance; 
 
     [Header("BGM配置")]
     public AudioClip gameBGM;          // 游戏背景音乐
     public AudioSource audioSource;    // 绑定的音频源组件
+
+    public AudioClip SimonclickSound;       // 点击音效剪辑
 
     private void Awake()
     {
@@ -15,21 +17,11 @@ public class BGMManager : MonoBehaviour
         {
             Instance = this;
             InitializeAudioSource();
-            
-            // 加载保存的音量
-            audioSource.volume = PlayerPrefs.GetFloat("BGMVolume", 1f);
         }
         else
         {
             Destroy(gameObject);
         }
-    }
-
-    // 新增：设置音量方法
-    public void SetVolume(float volume)
-    {
-        audioSource.volume = volume;
-        PlayerPrefs.SetFloat("BGMVolume", volume); // 保存到本地
     }
 
     private void Start()
@@ -101,6 +93,14 @@ public class BGMManager : MonoBehaviour
         {
             audioSource.clip = gameBGM;
             audioSource.loop = true;
+        }
+    }
+
+    public void PlayClickSound()
+    {
+        if (SimonclickSound != null && audioSource != null)
+        {
+            audioSource.PlayOneShot(SimonclickSound);
         }
     }
 }
