@@ -1,0 +1,149 @@
+using UnityEngine;
+using UnityEngine.InputSystem;
+using TMPro;
+using UnityEngine.SceneManagement;
+
+public class SimonCarCtrl : MonoBehaviour
+{
+    private Rigidbody rb;
+    private float moveX, moveY;
+    private float moveSpeed = 15f;
+    private float turnSpeed = 1f;
+
+    private int count;
+    public TextMeshProUGUI countText;
+    public AudioSource PickupAudio, BoomAudio;
+    public GameObject successPanel;
+    public TextMeshProUGUI successScoreText;
+
+    [Header("Pause")]
+    public GameObject pausePanel; // 确保在Unity编辑器中绑定此面板
+    public TextMeshProUGUI pauseTimeText;
+    public TextMeshProUGUI pauseScoreText;
+
+    private SimonCountdownTimer timer;
+    public AudioSource audioSource; 
+    public AudioClip SimonvictorySound;
+
+    // 添加对粒子系统的引用
+    public ParticleSystem sandDustEffect;
+
+    void Start()
+    {
+        rb = GetComponent<Rigidbody>();
+        rb.useGravity = true;
+        rb.mass = 1f;
+        count = 0;
+        SetCountText();
+        timer = FindObjectOfType<SimonCountdownTimer>();
+        pausePanel.SetActive(false); // 初始隐藏暂停面板
+
+        // 初始化时确保粒子系统处于关闭状态
+        if (sandDustEffect != null)
+        {
+            sandDustEffect.Stop();
+        }
+    }
+
+    public void OnMove(InputValue moveValue)
+    {
+        Vector2 moveVector = moveValue.Get<Vector2>();
+        moveX = moveVector.x;
+        moveY = moveVector.y;
+    }
+
+    void FixedUpdate()
+    {
+        float turnDirection = moveX * Mathf.Sign(moveY);
+        rb.angularVelocity = Vector3.up * turnDirection * turnSpeed;
+
+        Vector3 desiredForce = transform.forward * moveY * moveSpeed;
+        rb.AddForce(desiredForce, ForceMode.Force);
+
+        if (rb.velocity.magnitude > 18f)
+            rb.velocity = rb.velocity.normalized * 18f;
+
+        if (Mathf.Abs(transform.eulerAngles.x) > 0.1f || 
+            Mathf.Abs(transform.eulerAngles.z) > 0.1f)
+        {
+            transform.eulerAngles = new Vector3(0f, transform.eulerAngles.y, 0f);
+        }
+
+        // 根据速度控制粒子效果的开关
+        if (rb.velocity.magnitude > 0.1f)
+        {
+            EnableSandDustEffect(true);
+        }
+        else
+        {
+            EnableSandDustEffect(false);
+        }
+    }
+
+    private void EnableSandDustEffect(bool enable)
+    {
+        if (sandDustEffect != null)
+        {
+            if (enable && !sandDustEffect.isPlaying)
+            {
+                sandDustEffect.Play();
+            }
+            else if (!enable && sandDustEffect.isPlaying)
+            {
+                sandDustEffect.Stop();
+            }
+        }
+    }
+    
+    // 点击暂停按钮调用此方法
+    public void TogglePause()
+    {
+        bool isPaused = !pausePanel.activeSelf;
+        pausePanel.SetActive(isPaused);
+        Time.timeScale = isPaused ? 0f : 1f;
+
+        if (isPaused)
+        {
+            // 更新暂停界面数据
+            pauseTimeText.text = "Current Time Remaining:  " + timer.GetRemainingTimeFormatted();
+            pauseScoreText.text = "Current Score:  " + count.ToString();
+        }
+    }
+
+    public void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Helipad"))
+        {
+            int displayScore = Mathf.Min(count, 15);
+            successScoreText.text = $"You got {displayScore}/15 scores";
+            successPanel.SetActive(true);
+            audioSource.PlayOneShot(SimonvictorySound, 1.0f); 
+            timer.StopCountdown();
+            Time.timeScale = 0f;
+
+        }
+        else if (other.CompareTag("pickup+1")) CollectItem(other, 1);
+        else if (other.CompareTag("pickup+2")) CollectItem(other, 2);
+        else if (other.CompareTag("pickup-1")) CollectItem(other, -2);
+    }
+
+    private void CollectItem(Collider item, int points)
+    {
+        item.gameObject.SetActive(false);
+        count += points;
+        SetCountText();
+
+        if (item.CompareTag("pickup+1") || item.CompareTag("pickup+2"))
+            PickupAudio.Play();
+        else if (item.CompareTag("pickup-1"))
+            BoomAudio.Play();
+    }
+
+    public void SetCountText() => countText.text = "Score: " + count.ToString();
+
+    public void RestartGame()
+    {
+        Time.timeScale = 1f;
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    }
+}
